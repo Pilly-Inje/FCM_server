@@ -1,0 +1,42 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import * as admin from 'firebase-admin';
+
+@Injectable()
+export class FcmService {
+  constructor(private readonly configService : ConfigService) {
+    const projectId = this.configService.get<string>('FIREBASE_PROJECT_ID');
+    const clientEmail = this.configService.get<string>('FIREBASE_CLIENT_EMAIL');
+    const privateKey = this.configService.get<string>('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n'); // \n를 그냥 쓰면 nest에서는 에러 발생
+
+    if (admin.apps.length === 0) {
+      admin.initializeApp({
+        credential : admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey
+        }),
+      });
+    }
+  }
+
+  async sendPushNotification(
+    token : string,
+    title : string,
+    body : string,
+    data?: Record<string, string>,
+  ): Promise<string> {
+    const messgae : admin.messaging.Message = {
+      token,
+      notification : {
+        title, 
+        body,
+      },
+      data,
+    };
+
+    const response = await admin.messaging().send(messgae);
+    return response;
+  }
+
+}
