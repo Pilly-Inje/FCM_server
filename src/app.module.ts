@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { FcnController } from './fcn/fcn.controller';
-import { FcmController } from './fcm/fcm.controller';
-import { FcmService } from './fcm/fcm.service';
 import { FcmModule } from './fcm/fcm.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [FcmModule],
-  controllers: [AppController, FcnController, FcmController],
-  providers: [AppService, FcmService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // 여기 중요! 전역으로 등록
+    }),
+    FcmModule,
+  ],
 })
 export class AppModule {}

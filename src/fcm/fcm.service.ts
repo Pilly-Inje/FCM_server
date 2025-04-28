@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
+import { AlarmResponseType, AlarmType } from './fcm.type';
+import axios from 'axios';
 
 @Injectable()
 export class FcmService {
@@ -39,4 +41,14 @@ export class FcmService {
     return response;
   }
 
+  async getTodayAlarm() : Promise<string[]> {
+    const API_URL : string  = this.configService.get<string>('ALARM_API') as string;
+
+    const response = await axios.get<AlarmResponseType>(API_URL + `/1`);
+  
+    const alarmTimes : string[] = response.data.alarm.map(alarm => alarm.alarmTime);
+    console.log(alarmTimes);
+
+    return alarmTimes;
+  }
 }

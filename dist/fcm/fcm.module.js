@@ -6,21 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.FcmModule = void 0;
 const common_1 = require("@nestjs/common");
-const fcm_module_1 = require("./fcm/fcm.module");
 const config_1 = require("@nestjs/config");
-let AppModule = class AppModule {
+const fcm_service_1 = require("./fcm.service");
+const fcm_controller_1 = require("./fcm.controller");
+let FcmModule = class FcmModule {
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
+exports.FcmModule = FcmModule;
+exports.FcmModule = FcmModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            config_1.ConfigModule.forRoot({
-                isGlobal: true,
-            }),
-            fcm_module_1.FcmModule,
-        ],
+        imports: [config_1.ConfigModule],
+        providers: [fcm_service_1.FcmService],
+        controllers: [fcm_controller_1.FcmController],
     })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+], FcmModule);
+//# sourceMappingURL=fcm.module.js.map
