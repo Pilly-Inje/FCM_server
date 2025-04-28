@@ -43,11 +43,9 @@ export class FcmService {
 
   async getTodayAlarm() : Promise<string[]> {
     const API_URL : string  = this.configService.get<string>('ALARM_API') as string;
-
+    //TODO: 여러 사용자일 경우로 수정하기
     const response = await axios.get<AlarmResponseType>(API_URL + `/1`);
-  
     const alarmTimes : string[] = response.data.alarm.map(alarm => alarm.alarmTime);
-    console.log(alarmTimes);
 
     return alarmTimes;
   }

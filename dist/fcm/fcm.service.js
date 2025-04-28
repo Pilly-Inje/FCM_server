@@ -47,7 +47,6 @@ let FcmService = class FcmService {
         const API_URL = this.configService.get('ALARM_API');
         const response = await axios_1.default.get(API_URL + `/1`);
         const alarmTimes = response.data.alarm.map(alarm => alarm.alarmTime);
-        console.log(alarmTimes);
         return alarmTimes;
     }
 };

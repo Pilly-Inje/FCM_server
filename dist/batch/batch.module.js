@@ -6,23 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.BatchModule = void 0;
 const common_1 = require("@nestjs/common");
-const fcm_module_1 = require("./fcm/fcm.module");
-const config_1 = require("@nestjs/config");
-const batch_module_1 = require("./batch/batch.module");
-let AppModule = class AppModule {
+const schedule_1 = require("@nestjs/schedule");
+const bull_1 = require("@nestjs/bull");
+const batch_service_1 = require("./batch.service");
+const fcm_service_1 = require("../fcm/fcm.service");
+let BatchModule = class BatchModule {
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
+exports.BatchModule = BatchModule;
+exports.BatchModule = BatchModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule.forRoot({
-                isGlobal: true,
+            schedule_1.ScheduleModule.forRoot(),
+            bull_1.BullModule.registerQueue({
+                name: 'alarm',
             }),
-            fcm_module_1.FcmModule,
-            batch_module_1.BatchModule,
         ],
+        providers: [batch_service_1.BatchService, fcm_service_1.FcmService]
     })
-], AppModule);
-//# sourceMappingURL=app.module.js.map
+], BatchModule);
+//# sourceMappingURL=batch.module.js.map
