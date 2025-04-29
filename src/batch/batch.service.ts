@@ -14,7 +14,7 @@ export class BatchService {
   ) {}
 
   // 매일 자정 00:00:00
-  @Cron('0 * * * * *')
+  @Cron('0 0 * * * *')
   async registerAlarmsAtMidnight() {
     this.logger.log('[자정 스케줄 시작] 오늘 알림 등록 중...');
     try {
@@ -52,9 +52,6 @@ export class BatchService {
 
       const alarmsToAdd = latestAlarmTimes.filter(time => !currentJobTimes.includes(time));
       const alarmsToRemove = currentJobTimes.filter(time => !latestAlarmTimes.includes(time));
-
-      this.logger.log(`추가할 알람: ${alarmsToAdd}`);
-      this.logger.log(`삭제할 알람: ${alarmsToRemove}`);
 
       for (const alarmTime of alarmsToRemove) {
         const job = await this.alarmQueue.getJob(`alarm-${alarmTime}`);

@@ -22,7 +22,6 @@ let FcmController = class FcmController {
     }
     async sendPush(body) {
         const { token, title, message } = body;
-        await this.fcmService.getTodayAlarm();
         const messageId = await this.fcmService.sendPushNotification(token, title, message);
         return { messageId };
     }

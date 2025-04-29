@@ -8,16 +8,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FcmModule = void 0;
 const common_1 = require("@nestjs/common");
-const config_1 = require("@nestjs/config");
 const fcm_service_1 = require("./fcm.service");
 const fcm_controller_1 = require("./fcm.controller");
+const bull_1 = require("@nestjs/bull");
+const fcm_processer_1 = require("./fcm.processer");
 let FcmModule = class FcmModule {
 };
 exports.FcmModule = FcmModule;
 exports.FcmModule = FcmModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule],
-        providers: [fcm_service_1.FcmService],
+        imports: [
+            bull_1.BullModule.registerQueue({
+                name: 'alarm',
+            }),
+        ],
+        providers: [fcm_service_1.FcmService, fcm_processer_1.FcmProcessor],
         controllers: [fcm_controller_1.FcmController],
     })
 ], FcmModule);

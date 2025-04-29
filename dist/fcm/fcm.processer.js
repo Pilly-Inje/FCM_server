@@ -12,16 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FcmProcessor = void 0;
 const bull_1 = require("@nestjs/bull");
 const fcm_service_1 = require("./fcm.service");
+const config_1 = require("@nestjs/config");
 let FcmProcessor = class FcmProcessor {
     fcmService;
-    constructor(fcmService) {
+    configService;
+    constructor(fcmService, configService) {
         this.fcmService = fcmService;
+        this.configService = configService;
     }
     async handleSendAlarm(job) {
         const { alarmTime } = job.data;
         console.log(`[LOG] 알림 전송 - 알람시간 : ${alarmTime}`);
-        const token = '사용자디바이스토큰';
-        await this.fcmService.sendPushNotification(token, 'Pilly', `복약 시간이 되었습니다! (${alarmTime})`);
+        const token = this.configService.get('EMULATOR_TOKEN');
+        const title = 'Pilly';
+        const message = `복약 시간이 되었습니다! (${alarmTime})`;
+        await this.fcmService.sendPushNotification(token, title, message);
     }
 };
 exports.FcmProcessor = FcmProcessor;
@@ -33,6 +38,7 @@ __decorate([
 ], FcmProcessor.prototype, "handleSendAlarm", null);
 exports.FcmProcessor = FcmProcessor = __decorate([
     (0, bull_1.Processor)('alarm'),
-    __metadata("design:paramtypes", [fcm_service_1.FcmService])
+    __metadata("design:paramtypes", [fcm_service_1.FcmService,
+        config_1.ConfigService])
 ], FcmProcessor);
 //# sourceMappingURL=fcm.processer.js.map

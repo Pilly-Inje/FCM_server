@@ -32,6 +32,7 @@ let FcmService = class FcmService {
         }
     }
     async sendPushNotification(token, title, body, data) {
+        console.log("~~~~~~~~~~ FCM Service");
         const messgae = {
             token,
             notification: {
@@ -41,6 +42,7 @@ let FcmService = class FcmService {
             data,
         };
         const response = await admin.messaging().send(messgae);
+        console.log(`FCM server Response = ${response}`);
         return response;
     }
     async getTodayAlarm() {

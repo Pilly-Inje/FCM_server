@@ -55,8 +55,6 @@ let BatchService = BatchService_1 = class BatchService {
             const latestAlarmTimes = latestAlarms;
             const alarmsToAdd = latestAlarmTimes.filter(time => !currentJobTimes.includes(time));
             const alarmsToRemove = currentJobTimes.filter(time => !latestAlarmTimes.includes(time));
-            this.logger.log(`추가할 알람: ${alarmsToAdd}`);
-            this.logger.log(`삭제할 알람: ${alarmsToRemove}`);
             for (const alarmTime of alarmsToRemove) {
                 const job = await this.alarmQueue.getJob(`alarm-${alarmTime}`);
                 if (job) {
@@ -93,7 +91,7 @@ let BatchService = BatchService_1 = class BatchService {
 };
 exports.BatchService = BatchService;
 __decorate([
-    (0, schedule_1.Cron)('0 * * * * *'),
+    (0, schedule_1.Cron)('0 0 * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

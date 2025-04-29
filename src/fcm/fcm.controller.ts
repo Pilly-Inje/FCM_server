@@ -8,7 +8,6 @@ export class FcmController {
   @Post('push')
   async sendPush(@Body() body : { token : string, title : string, message : string }) {
     const { token, title, message } = body;
-    await this.fcmService.getTodayAlarm();
     const messageId = await this.fcmService.sendPushNotification(token, title, message);
 
     return { messageId };

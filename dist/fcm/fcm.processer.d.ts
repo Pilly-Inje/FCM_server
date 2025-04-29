@@ -1,7 +1,9 @@
 import { Job } from 'bull';
 import { FcmService } from './fcm.service';
+import { ConfigService } from '@nestjs/config';
 export declare class FcmProcessor {
     private readonly fcmService;
-    constructor(fcmService: FcmService);
+    private readonly configService;
+    constructor(fcmService: FcmService, configService: ConfigService);
     handleSendAlarm(job: Job): Promise<void>;
 }
