@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
-import { AlarmResponseType, AlarmType } from './fcm.type';
+import { AlarmResponseType, AlarmType, SaveTokenDTO, SaveTokenResponseDTO } from './fcm.type';
 import axios from 'axios';
+import { FcmRepository } from './fcm.repository';
+import { ResponseHelper } from 'src/common/helpers/response.helper';
 
 @Injectable()
 export class FcmService {
-  constructor(private readonly configService : ConfigService) {
+  constructor(
+    private readonly configService : ConfigService,
+    private readonly fcmReposiotry : FcmRepository
+  ) {
     const projectId = this.configService.get<string>('FIREBASE_PROJECT_ID');
     const clientEmail = this.configService.get<string>('FIREBASE_CLIENT_EMAIL');
     const privateKey = this.configService.get<string>('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n'); // \n를 그냥 쓰면 nest에서는 에러 발생
@@ -49,5 +54,19 @@ export class FcmService {
     const alarmTimes : string[] = response.data.alarm.map(alarm => alarm.alarmTime);
 
     return alarmTimes;
+  }
+
+  async saveToken({userId, token} : {userId : number, token : string}) : Promise<SaveTokenResponseDTO> {
+    try{
+      const response : SaveTokenDTO = await this.fcmReposiotry.saveToken(userId, token);
+      return ResponseHelper.success(response, '토큰을 성공적으로 저장했습니다');
+    } catch (error) {
+      console.error(`토큰 저장 실패 : `,error);
+      return ResponseHelper.fail('토큰 저장에 실패했습니다.');
+    }
+  }
+
+  async getTokensByUserId(userId : number) : Promise<void> {
+    
   }
 }
