@@ -13,8 +13,8 @@ export class BatchService {
     @InjectQueue('alarm') private readonly alarmQueue: Queue,
   ) {}
 
-  // 매일 자정 00:00:00
-  @Cron('0 0 * * * *')
+  // 매일 자정 
+  @Cron('0 * * * * *')
   async registerAlarmsAtMidnight() {
     this.logger.log('[자정 스케줄 시작] 오늘 알림 등록 중...');
     try {

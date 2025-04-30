@@ -28,7 +28,6 @@ export class FcmService {
     body : string,
     data?: Record<string, string>,
   ): Promise<string> {
-    console.log("~~~~~~~~~~ FCM Service");
     const messgae : admin.messaging.Message = {
       token,
       notification : {
@@ -39,7 +38,7 @@ export class FcmService {
     };
     
     const response = await admin.messaging().send(messgae);
-    console.log(`FCM server Response = ${response}`);
+    console.log(`[FCM server Response] = ${response}`);
     return response;
   }
 

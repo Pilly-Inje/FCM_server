@@ -23,10 +23,12 @@ let FcmProcessor = class FcmProcessor {
     async handleSendAlarm(job) {
         const { alarmTime } = job.data;
         console.log(`[LOG] 알림 전송 - 알람시간 : ${alarmTime}`);
-        const token = this.configService.get('EMULATOR_TOKEN');
+        const EMULATOR_TOKEN = this.configService.get('EMULATOR_TOKEN');
+        const EMULATOR_TOKEN2 = this.configService.get('EMULATOR_TOKEN2');
         const title = 'Pilly';
         const message = `복약 시간이 되었습니다! (${alarmTime})`;
-        await this.fcmService.sendPushNotification(token, title, message);
+        await this.fcmService.sendPushNotification(EMULATOR_TOKEN, title, message);
+        await this.fcmService.sendPushNotification(EMULATOR_TOKEN2, title, message);
     }
 };
 exports.FcmProcessor = FcmProcessor;
