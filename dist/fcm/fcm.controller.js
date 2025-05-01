@@ -25,6 +25,9 @@ let FcmController = class FcmController {
         const messageId = await this.fcmService.sendPushNotification(token, title, message);
         return { messageId };
     }
+    async getAllTokens() {
+        return await this.fcmService.getAllTokens();
+    }
 };
 exports.FcmController = FcmController;
 __decorate([
@@ -34,6 +37,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FcmController.prototype, "sendPush", null);
+__decorate([
+    (0, common_1.Get)('all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], FcmController.prototype, "getAllTokens", null);
 exports.FcmController = FcmController = __decorate([
     (0, common_1.Controller)('fcm'),
     __metadata("design:paramtypes", [fcm_service_1.FcmService])

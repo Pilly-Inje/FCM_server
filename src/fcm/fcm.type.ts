@@ -1,3 +1,10 @@
+interface BaseResponse<T> {
+  success : boolean;
+  statusCode : number;
+  message : string;
+  data : T | null;
+}
+
 interface AlarmType {
   alarmTime : string,
   medicineCount : number,
@@ -10,7 +17,7 @@ interface AlarmResponseType {
   alarm : AlarmType[]
 }
 
-interface SaveTokenDTO {
+interface SaveTokenENTITY {
   id : number;
   userid : number;
   token : string;
@@ -20,18 +27,7 @@ interface SaveTokenDTO {
   updatedAt : Date;
 }
 
-interface SaveTokenResponseDTO {
-  success: boolean,
-  statusCode: number,
-  message: string,
-  data: SaveTokenDTO | null
-}
+type SaveTokenResponseDTO = BaseResponse<SaveTokenENTITY>;
+type getAllTokensResponseDTO = BaseResponse<string[]>;
 
-interface getAllTokensResponseDTO {
-  success: boolean,
-  statusCode: number,
-  message: string,
-  data: string[] | null
-}
-
-export { AlarmResponseType, AlarmType, SaveTokenDTO, SaveTokenResponseDTO, getAllTokensResponseDTO};
+export { AlarmResponseType, AlarmType, SaveTokenResponseDTO, getAllTokensResponseDTO, SaveTokenENTITY};

@@ -1,4 +1,5 @@
 import { FcmService } from './fcm.service';
+import { getAllTokensResponseDTO } from './fcm.type';
 export declare class FcmController {
     private readonly fcmService;
     constructor(fcmService: FcmService);
@@ -9,4 +10,5 @@ export declare class FcmController {
     }): Promise<{
         messageId: string;
     }>;
+    getAllTokens(): Promise<getAllTokensResponseDTO>;
 }

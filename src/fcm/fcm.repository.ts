@@ -18,13 +18,12 @@ export class FcmRepository {
     return this.repo.findOne({ where: { token } });
   }
 
-  async findTokensByUserId(userId: number): Promise<string[]> {
+  async getAllTokens(): Promise<string[]> {
     const tokens = await this.repo
-      .createQueryBuilder('fcm')
-      .select('fcm.token')
-      .where('fcm.userId = :userId', { userId })
-      .andWhere('fcm.isActive = :active', { active: true })
-      .getRawMany();
+    .createQueryBuilder('fcm')
+    .select('fcm.token', 'token')
+    .andWhere('fcm.isActive = :active', { active: true })
+    .getRawMany();
 
     const result : string[] = tokens.map(t => t.fcm_token);
   

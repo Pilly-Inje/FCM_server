@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
-import { AlarmResponseType, AlarmType, SaveTokenDTO, SaveTokenResponseDTO } from './fcm.type';
+import { AlarmResponseType, getAllTokensResponseDTO, SaveTokenENTITY, SaveTokenResponseDTO } from './fcm.type';
 import axios from 'axios';
 import { FcmRepository } from './fcm.repository';
 import { ResponseHelper } from 'src/common/helpers/response.helper';
@@ -58,7 +58,7 @@ export class FcmService {
 
   async saveToken({userId, token} : {userId : number, token : string}) : Promise<SaveTokenResponseDTO> {
     try{
-      const response : SaveTokenDTO = await this.fcmReposiotry.saveToken(userId, token);
+      const response : SaveTokenENTITY = await this.fcmReposiotry.saveToken(userId, token);
       return ResponseHelper.success(response, '토큰을 성공적으로 저장했습니다');
     } catch (error) {
       console.error(`토큰 저장 실패 : `,error);
@@ -66,7 +66,17 @@ export class FcmService {
     }
   }
 
+  async getAllTokens() : Promise<getAllTokensResponseDTO> {
+    try {
+      const response : string[] = await this.fcmReposiotry.getAllTokens();
+      return ResponseHelper.success(response,"모든 토큰을 성공적으로 조회했습니다");
+    } catch (error) {
+      console.error('모든 토큰 조회 실패 : ', error);
+      return ResponseHelper.fail("모든 토큰 조회 중 에러 발생");
+    }
+  }
+
   async getTokensByUserId(userId : number) : Promise<void> {
-    
+    //TODO: userId를 이용해 토큰을 가져오는 로직 구현
   }
 }

@@ -91,7 +91,7 @@ let BatchService = BatchService_1 = class BatchService {
 };
 exports.BatchService = BatchService;
 __decorate([
-    (0, schedule_1.Cron)('0 0 * * * *'),
+    (0, schedule_1.Cron)('0 * * * * *'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

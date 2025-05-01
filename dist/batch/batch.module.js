@@ -12,6 +12,7 @@ const schedule_1 = require("@nestjs/schedule");
 const bull_1 = require("@nestjs/bull");
 const batch_service_1 = require("./batch.service");
 const fcm_service_1 = require("../fcm/fcm.service");
+const fcm_module_1 = require("../fcm/fcm.module");
 let BatchModule = class BatchModule {
 };
 exports.BatchModule = BatchModule;
@@ -22,6 +23,7 @@ exports.BatchModule = BatchModule = __decorate([
             bull_1.BullModule.registerQueue({
                 name: 'alarm',
             }),
+            fcm_module_1.FcmModule,
         ],
         providers: [batch_service_1.BatchService, fcm_service_1.FcmService]
     })

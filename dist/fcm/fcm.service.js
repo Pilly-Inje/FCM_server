@@ -14,10 +14,14 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const admin = require("firebase-admin");
 const axios_1 = require("axios");
+const fcm_repository_1 = require("./fcm.repository");
+const response_helper_1 = require("../common/helpers/response.helper");
 let FcmService = class FcmService {
     configService;
-    constructor(configService) {
+    fcmReposiotry;
+    constructor(configService, fcmReposiotry) {
         this.configService = configService;
+        this.fcmReposiotry = fcmReposiotry;
         const projectId = this.configService.get('FIREBASE_PROJECT_ID');
         const clientEmail = this.configService.get('FIREBASE_CLIENT_EMAIL');
         const privateKey = this.configService.get('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n');
@@ -50,10 +54,33 @@ let FcmService = class FcmService {
         const alarmTimes = response.data.alarm.map(alarm => alarm.alarmTime);
         return alarmTimes;
     }
+    async saveToken({ userId, token }) {
+        try {
+            const response = await this.fcmReposiotry.saveToken(userId, token);
+            return response_helper_1.ResponseHelper.success(response, '토큰을 성공적으로 저장했습니다');
+        }
+        catch (error) {
+            console.error(`토큰 저장 실패 : `, error);
+            return response_helper_1.ResponseHelper.fail('토큰 저장에 실패했습니다.');
+        }
+    }
+    async getAllTokens() {
+        try {
+            const response = await this.fcmReposiotry.getAllTokens();
+            return response_helper_1.ResponseHelper.success(response, "모든 토큰을 성공적으로 조회했습니다");
+        }
+        catch (error) {
+            console.error('모든 토큰 조회 실패 : ', error);
+            return response_helper_1.ResponseHelper.fail("모든 토큰 조회 중 에러 발생");
+        }
+    }
+    async getTokensByUserId(userId) {
+    }
 };
 exports.FcmService = FcmService;
 exports.FcmService = FcmService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        fcm_repository_1.FcmRepository])
 ], FcmService);
 //# sourceMappingURL=fcm.service.js.map

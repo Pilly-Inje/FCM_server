@@ -12,6 +12,9 @@ const fcm_service_1 = require("./fcm.service");
 const fcm_controller_1 = require("./fcm.controller");
 const bull_1 = require("@nestjs/bull");
 const fcm_processer_1 = require("./fcm.processer");
+const fcm_repository_1 = require("./fcm.repository");
+const typeorm_1 = require("@nestjs/typeorm");
+const fcm_entity_1 = require("./fcm.entity");
 let FcmModule = class FcmModule {
 };
 exports.FcmModule = FcmModule;
@@ -21,9 +24,15 @@ exports.FcmModule = FcmModule = __decorate([
             bull_1.BullModule.registerQueue({
                 name: 'alarm',
             }),
+            typeorm_1.TypeOrmModule.forFeature([fcm_entity_1.FcmTokenEntity])
         ],
-        providers: [fcm_service_1.FcmService, fcm_processer_1.FcmProcessor],
         controllers: [fcm_controller_1.FcmController],
+        providers: [
+            fcm_service_1.FcmService,
+            fcm_processer_1.FcmProcessor,
+            fcm_repository_1.FcmRepository,
+        ],
+        exports: [fcm_repository_1.FcmRepository],
     })
 ], FcmModule);
 //# sourceMappingURL=fcm.module.js.map

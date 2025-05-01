@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FcmService } from './fcm.service';
+import { getAllTokensResponseDTO } from './fcm.type';
 
 @Controller('fcm')
 export class FcmController {
@@ -13,4 +14,8 @@ export class FcmController {
     return { messageId };
   }
 
+  @Get('all')
+  async getAllTokens() : Promise<getAllTokensResponseDTO>{
+    return await this.fcmService.getAllTokens();
+  }
 }

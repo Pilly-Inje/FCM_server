@@ -9,8 +9,8 @@ export class FcmTokenEntity{
   @Column({ type : 'int' })
   userid : number;
 
-  @Column({ type : 'text'})
-  token : string;
+  @Column({ type: 'varchar', length: 512, unique: true })
+  token: string;  
 
   @Column({ type : 'varchar', length : 10 , nullable : true})
   platform : 'ios' | 'android';

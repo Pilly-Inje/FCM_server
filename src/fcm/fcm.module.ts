@@ -4,15 +4,24 @@ import { FcmController } from './fcm.controller';
 import { BullModule } from '@nestjs/bull';
 import { FcmProcessor } from './fcm.processer';
 import { FcmRepository } from './fcm.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { FcmTokenEntity } from './fcm.entity';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'alarm', // Processor와 동일한 Queue 이름
+      name: 'alarm',
     }),
+    TypeOrmModule.forFeature([FcmTokenEntity])
   ],
-  providers : [FcmService, FcmProcessor, FcmRepository],
-  exports : [FcmRepository],
-  controllers : [FcmController],
+  controllers: [FcmController],
+  providers: [
+    FcmService,
+    FcmProcessor,
+    FcmRepository,
+  ],
+  exports: [FcmRepository],
 })
 export class FcmModule {}
+
