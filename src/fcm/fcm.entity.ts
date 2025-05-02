@@ -7,7 +7,7 @@ export class FcmTokenEntity{
   id : number;
 
   @Column({ type : 'int' })
-  userid : number;
+  user_id : number;
 
   @Column({ type: 'varchar', length: 512, unique: true })
   token: string;  

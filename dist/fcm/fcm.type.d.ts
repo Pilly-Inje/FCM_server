@@ -16,7 +16,7 @@ interface AlarmResponseType {
 }
 interface SaveTokenENTITY {
     id: number;
-    userid: number;
+    user_id: number;
     token: string;
     platform: 'ios' | 'android';
     isActive: boolean;

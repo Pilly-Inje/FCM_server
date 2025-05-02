@@ -10,8 +10,8 @@ export class FcmRepository {
     private readonly repo: Repository<FcmTokenEntity>,
   ) {}
 
-  async saveToken(userId: number, token: string) {
-    return this.repo.save({ userId, token });
+  async save(data: Partial<FcmTokenEntity>) {
+    return this.repo.save(data);
   }
 
   async findByToken(token: string) {
@@ -22,11 +22,11 @@ export class FcmRepository {
     const tokens = await this.repo
     .createQueryBuilder('fcm')
     .select('fcm.token', 'token')
-    .andWhere('fcm.isActive = :active', { active: true })
+    .where('fcm.isActive = :active', { active: true })
     .getRawMany();
-
-    const result : string[] = tokens.map(t => t.fcm_token);
   
-    return result;
+  const result: string[] = tokens.map(t => t.token);
+
+  return result;
   }
 }

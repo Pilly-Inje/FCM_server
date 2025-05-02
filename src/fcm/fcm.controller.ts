@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { FcmService } from './fcm.service';
 import { getAllTokensResponseDTO } from './fcm.type';
+import { SaveFcmTokenDto } from './dto/save-token.dto';
 
 @Controller('fcm')
 export class FcmController {
@@ -14,8 +15,14 @@ export class FcmController {
     return { messageId };
   }
 
+  @Post('token')
+  async saveToken(@Body() saveFcmTokenDto: SaveFcmTokenDto) {
+    return this.fcmService.saveToken(saveFcmTokenDto);
+  }
+
   @Get('all')
   async getAllTokens() : Promise<getAllTokensResponseDTO>{
     return await this.fcmService.getAllTokens();
   }
+  
 }

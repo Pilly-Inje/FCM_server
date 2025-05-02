@@ -5,6 +5,8 @@ import { AlarmResponseType, getAllTokensResponseDTO, SaveTokenENTITY, SaveTokenR
 import axios from 'axios';
 import { FcmRepository } from './fcm.repository';
 import { ResponseHelper } from 'src/common/helpers/response.helper';
+import { FcmTokenEntity } from './fcm.entity';
+import { SaveFcmTokenDto } from './dto/save-token.dto';
 
 @Injectable()
 export class FcmService {
@@ -56,12 +58,26 @@ export class FcmService {
     return alarmTimes;
   }
 
-  async saveToken({userId, token} : {userId : number, token : string}) : Promise<SaveTokenResponseDTO> {
-    try{
-      const response : SaveTokenENTITY = await this.fcmReposiotry.saveToken(userId, token);
-      return ResponseHelper.success(response, '토큰을 성공적으로 저장했습니다');
+  async saveToken(saveFcmTokenDto: SaveFcmTokenDto): Promise<SaveTokenResponseDTO> {
+    try {
+      const {user_id, token, platform} = saveFcmTokenDto;
+      const existing = await this.fcmReposiotry.findByToken(token);
+
+      if (existing) {
+        if (!existing.isActive) {
+          existing.isActive = true;
+          await this.fcmReposiotry.save(existing);
+        }
+
+        return ResponseHelper.success( existing, '이미 등록된 토큰입니다. 활성화 상태로 업데이트되었습니다.');
+      }
+
+      const newToken: Partial<FcmTokenEntity> = { user_id, token, platform, isActive: true };
+
+      const saved = await this.fcmReposiotry.save(newToken);
+      return ResponseHelper.success(saved, '토큰을 성공적으로 저장했습니다');
     } catch (error) {
-      console.error(`토큰 저장 실패 : `,error);
+      console.error(`토큰 저장 실패 : `, error);                                                                        
       return ResponseHelper.fail('토큰 저장에 실패했습니다.');
     }
   }

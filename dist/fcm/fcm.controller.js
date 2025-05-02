@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FcmController = void 0;
 const common_1 = require("@nestjs/common");
 const fcm_service_1 = require("./fcm.service");
+const save_token_dto_1 = require("./dto/save-token.dto");
 let FcmController = class FcmController {
     fcmService;
     constructor(fcmService) {
@@ -24,6 +25,9 @@ let FcmController = class FcmController {
         const { token, title, message } = body;
         const messageId = await this.fcmService.sendPushNotification(token, title, message);
         return { messageId };
+    }
+    async saveToken(saveFcmTokenDto) {
+        return this.fcmService.saveToken(saveFcmTokenDto);
     }
     async getAllTokens() {
         return await this.fcmService.getAllTokens();
@@ -37,6 +41,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FcmController.prototype, "sendPush", null);
+__decorate([
+    (0, common_1.Post)('token'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [save_token_dto_1.SaveFcmTokenDto]),
+    __metadata("design:returntype", Promise)
+], FcmController.prototype, "saveToken", null);
 __decorate([
     (0, common_1.Get)('all'),
     __metadata("design:type", Function),

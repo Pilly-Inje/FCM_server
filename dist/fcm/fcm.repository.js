@@ -22,8 +22,8 @@ let FcmRepository = class FcmRepository {
     constructor(repo) {
         this.repo = repo;
     }
-    async saveToken(userId, token) {
-        return this.repo.save({ userId, token });
+    async save(data) {
+        return this.repo.save(data);
     }
     async findByToken(token) {
         return this.repo.findOne({ where: { token } });
@@ -32,9 +32,9 @@ let FcmRepository = class FcmRepository {
         const tokens = await this.repo
             .createQueryBuilder('fcm')
             .select('fcm.token', 'token')
-            .andWhere('fcm.isActive = :active', { active: true })
+            .where('fcm.isActive = :active', { active: true })
             .getRawMany();
-        const result = tokens.map(t => t.fcm_token);
+        const result = tokens.map(t => t.token);
         return result;
     }
 };

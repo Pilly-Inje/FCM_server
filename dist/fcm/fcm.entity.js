@@ -13,7 +13,7 @@ exports.FcmTokenEntity = void 0;
 const typeorm_1 = require("typeorm");
 let FcmTokenEntity = class FcmTokenEntity {
     id;
-    userid;
+    user_id;
     token;
     platform;
     isActive;
@@ -28,7 +28,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ type: 'int' }),
     __metadata("design:type", Number)
-], FcmTokenEntity.prototype, "userid", void 0);
+], FcmTokenEntity.prototype, "user_id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 512, unique: true }),
     __metadata("design:type", String)

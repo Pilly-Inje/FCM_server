@@ -54,10 +54,21 @@ let FcmService = class FcmService {
         const alarmTimes = response.data.alarm.map(alarm => alarm.alarmTime);
         return alarmTimes;
     }
-    async saveToken({ userId, token }) {
+    async saveToken(saveFcmTokenDto) {
         try {
-            const response = await this.fcmReposiotry.saveToken(userId, token);
-            return response_helper_1.ResponseHelper.success(response, '토큰을 성공적으로 저장했습니다');
+            const { user_id, token, platform } = saveFcmTokenDto;
+            console.log(`user_id =   ${user_id}`);
+            const existing = await this.fcmReposiotry.findByToken(token);
+            if (existing) {
+                if (!existing.isActive) {
+                    existing.isActive = true;
+                    await this.fcmReposiotry.save(existing);
+                }
+                return response_helper_1.ResponseHelper.success(existing, '이미 등록된 토큰입니다. 활성화 상태로 업데이트되었습니다.');
+            }
+            const newToken = { user_id, token, platform, isActive: true };
+            const saved = await this.fcmReposiotry.save(newToken);
+            return response_helper_1.ResponseHelper.success(saved, '토큰을 성공적으로 저장했습니다');
         }
         catch (error) {
             console.error(`토큰 저장 실패 : `, error);
