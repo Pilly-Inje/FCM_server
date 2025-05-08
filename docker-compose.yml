@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  fcm_server:
+    build:
+      context: ./fcm_server
+    container_name: fcm_server
+    ports:
+      - "3001:3000" # 외부:내부
+    networks:
+      - app-network
+
+  batch_server:
+    build:
+      context: ./batch_server
+    container_name: batch_server
+    depends_on:
+      - fcm_server
+    ports:
+      - "3002:3000"
+    env_file:
+      - ./batch_server/.env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
