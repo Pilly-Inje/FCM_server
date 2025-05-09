@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { FcmModule } from './fcm/fcm.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MetricsService } from './metrics/metrics.service';
+import { MetricsController } from './metrics/metrics.controller';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     FcmModule,
+    MetricsModule
   ],
+  providers: [MetricsService],
+  controllers: [MetricsController],
 })
 export class AppModule {}
