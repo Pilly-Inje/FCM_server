@@ -3,6 +3,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
 import { BatchService } from './batch.service';
 import { HttpModule } from '@nestjs/axios';
+import { MetricsModule } from 'src/metrics/metrics.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { HttpModule } from '@nestjs/axios';
       name: 'alarm',
     }),
     HttpModule,
+    MetricsModule
   ],
   providers: [BatchService]
 })

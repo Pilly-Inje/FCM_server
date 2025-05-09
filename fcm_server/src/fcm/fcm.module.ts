@@ -6,7 +6,7 @@ import { FcmProcessor } from './fcm.processer';
 import { FcmRepository } from './fcm.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FcmTokenEntity } from './fcm.entity';
-
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
   imports: [
@@ -14,6 +14,7 @@ import { FcmTokenEntity } from './fcm.entity';
       name: 'alarm',
     }),
     TypeOrmModule.forFeature([FcmTokenEntity]),
+    MetricsModule,
   ],
   controllers: [FcmController],
   providers: [

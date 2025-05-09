@@ -4,6 +4,7 @@ import { Queue } from 'bull';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { MetricsService } from 'src/metrics/metrics.service';
 
 @Injectable()
 export class BatchService {
@@ -12,6 +13,7 @@ export class BatchService {
   constructor(
     @InjectQueue('alarm') private readonly alarmQueue: Queue,
     private readonly configService : ConfigService,
+    private readonly metricsService : MetricsService,
   ) {}
 
   // 매일 자정 
@@ -38,6 +40,8 @@ export class BatchService {
       this.logger.log('[자정 스케줄 완료] 알림 등록 끝!');
     } catch (error) {
       this.logger.error('[자정 스케줄 실패]', error.stack);
+      this.metricsService.incError();
+      this.metricsService.notifyError(`[Batch Error] ${error}`)
     }
   }
 
@@ -81,6 +85,8 @@ export class BatchService {
       this.logger.log('🚨 [55초 스케줄 완료] 알람 변경사항 체크 끝!');
     } catch (error) {
       this.logger.error('❌ [55초 스케줄 실패]', error.stack);
+      this.metricsService.incError();
+      this.metricsService.notifyError(`[Batch Error] ${error}`)
     }
   }
 

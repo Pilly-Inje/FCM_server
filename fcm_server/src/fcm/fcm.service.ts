@@ -7,11 +7,13 @@ import { FcmRepository } from './fcm.repository';
 import { ResponseHelper } from 'src/common/helpers/response.helper';
 import { FcmTokenEntity } from './fcm.entity';
 import { SaveFcmTokenDto } from './dto/save-token.dto';
+import { MetricsService } from 'src/metrics/metrics.service';
 
 @Injectable()
 export class FcmService {
   constructor(
     private readonly configService : ConfigService,
+    private readonly metricsService : MetricsService,
     private readonly fcmReposiotry : FcmRepository
   ) {
     const projectId = this.configService.get<string>('FIREBASE_PROJECT_ID');
@@ -77,7 +79,9 @@ export class FcmService {
       const saved = await this.fcmReposiotry.save(newToken);
       return ResponseHelper.success(saved, '토큰을 성공적으로 저장했습니다');
     } catch (error) {
-      console.error(`토큰 저장 실패 : `, error);                                                                        
+      console.error(`토큰 저장 실패 : `, error);              
+      this.metricsService.incError();    
+      this.metricsService.notifyError(`[FCM Error] ${error}`)                                                      
       return ResponseHelper.fail('토큰 저장에 실패했습니다.');
     }
   }
@@ -88,6 +92,8 @@ export class FcmService {
       return ResponseHelper.success(response,"모든 토큰을 성공적으로 조회했습니다");
     } catch (error) {
       console.error('모든 토큰 조회 실패 : ', error);
+      this.metricsService.incError();
+      this.metricsService.notifyError(`[FCM Error] ${error}`)
       return ResponseHelper.fail("모든 토큰 조회 중 에러 발생");
     }
   }
